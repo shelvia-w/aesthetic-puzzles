@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aesthetic Puzzles</title>
+    <meta name="description" content="Classic puzzles, beautifully illustrated" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <h1>Aesthetic Puzzles</h1>
+          <p class="tagline">
+            <span class="spark" aria-hidden="true"></span>
+            Classic puzzles, beautifully illustrated
+          </p>
+        </div>
+
+        <div class="hero-actions">
+          <label class="search-wrap">
+            <span class="search-icon" aria-hidden="true"></span>
+            <span class="sr-only">Search puzzles</span>
+            <input id="searchInput" type="search" placeholder="Search puzzles..." autocomplete="off" />
+          </label>
+        </div>
+      </header>
+
+      <nav class="filters" aria-label="Puzzle filters" id="filters"></nav>
+
+      <section aria-label="Puzzle gallery">
+        <div class="grid" id="problemGrid"></div>
+        <p class="empty" id="emptyState" hidden>No puzzles match that search.</p>
+      </section>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

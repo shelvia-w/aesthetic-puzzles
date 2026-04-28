@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Two Doors and Two Guards Visualizer | Aesthetic Puzzles</title>
+    <meta name="description" content="Interactive visualizer for the Two Doors, Two Guards logic puzzle" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="two-doors-two-guards.css" />
+  </head>
+  <body>
+    <main class="viz-shell">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Puzzles</a>
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <a href="../problems/two-doors-two-guards.html">Two Doors, Two Guards</a>
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <a href="../solutions/two-doors-two-guards.html">Solution</a>
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <span aria-current="page">Visualizer</span>
+      </nav>
+
+      <header class="viz-header">
+        <h1>Two Doors and Two Guards</h1>
+        <p class="viz-subtitle">Can you find the door to freedom?</p>
+      </header>
+
+      <section class="visualizer-card" aria-label="Visualization">
+        <div class="scene" id="scene">
+
+          <div class="door-group door-left" id="doorLeft">
+            <div class="door blue-door" id="blueDoor">
+              <div class="door-frame">
+                <img class="door-art" src="../public/images/two-doors-two-guards/door1.png" alt="" aria-hidden="true" />
+              </div>
+              <button class="door-click-target" id="doorLeftBtn" type="button" disabled aria-label="Choose Door A"></button>
+            </div>
+            <div class="door-label" id="doorLeftLabel">Door A</div>
+            <div class="door-result" id="doorLeftResult"></div>
+          </div>
+
+          <div class="door-group door-right" id="doorRight">
+            <div class="door red-door" id="redDoor">
+              <div class="door-frame">
+                <img class="door-art" src="../public/images/two-doors-two-guards/door2.png" alt="" aria-hidden="true" />
+              </div>
+              <button class="door-click-target" id="doorRightBtn" type="button" disabled aria-label="Choose Door B"></button>
+            </div>
+            <div class="door-label" id="doorRightLabel">Door B</div>
+            <div class="door-result" id="doorRightResult"></div>
+          </div>
+
+          <div class="guard guard-left" id="guardLeft">
+            <div class="guard-body">
+              <img class="guard-art" src="../public/images/two-doors-two-guards/guard1.png" alt="" aria-hidden="true" />
+            </div>
+            <div class="guard-label" id="guardLeftLabel">Guard</div>
+            <button class="guard-click-target" id="guardLeftBtn" type="button" disabled aria-label="Ask Left Guard"></button>
+            <div class="thought-bubble" id="thoughtLeft">
+              <div class="thought-content" id="thoughtLeftContent"></div>
+            </div>
+          </div>
+
+          <div class="guard guard-right" id="guardRight">
+            <div class="guard-body">
+              <img class="guard-art" src="../public/images/two-doors-two-guards/guard2.png" alt="" aria-hidden="true" />
+            </div>
+            <div class="guard-label" id="guardRightLabel">Guard</div>
+            <button class="guard-click-target" id="guardRightBtn" type="button" disabled aria-label="Ask Right Guard"></button>
+            <div class="thought-bubble thought-right" id="thoughtRight">
+              <div class="thought-content" id="thoughtRightContent"></div>
+            </div>
+          </div>
+
+          <div class="speech-bubble" id="speechBubble">
+            <div class="speech-content" id="speechContent"></div>
+            <div class="speech-tail"></div>
+          </div>
+
+        </div>
+
+        <div class="step-state" id="stepState">
+          <p class="caption" id="captionText">Choose a guard to ask your question.</p>
+        </div>
+
+        <div class="choice-buttons" id="choiceButtons">
+          <button class="choice-btn choice-btn-blue" id="askLeftBtn" type="button">
+            <span class="choice-icon">?</span> Ask Left Guard
+          </button>
+          <button class="choice-btn choice-btn-red" id="askRightBtn" type="button">
+            <span class="choice-icon">?</span> Ask Right Guard
+          </button>
+        </div>
+
+        <div class="result-panel" id="resultPanel">
+          <div class="result-badge" id="resultBadge"></div>
+          <p class="result-explanation" id="resultExplanation"></p>
+        </div>
+      </section>
+
+      <section class="controls" aria-label="Controls">
+        <button class="ctrl-btn primary" id="btnNewRound" type="button">Reset</button>
+        <button class="ctrl-btn" id="btnExplain" type="button">View Explanation</button>
+      </section>
+
+    </main>
+
+    <script src="two-doors-two-guards.js"></script>
+  </body>
+</html>
