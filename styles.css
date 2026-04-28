@@ -526,7 +526,7 @@ h2 {
   background-clip: text;
   color: transparent;
   font-size: clamp(1.8rem, 4.2vw, 2.7rem);
-  line-height: 1;
+  line-height: 1.18;
   display: inline-block;
 }
 
@@ -633,7 +633,7 @@ h2 {
   background-clip: text;
   color: transparent;
   font-size: clamp(1.8rem, 4.2vw, 2.7rem);
-  line-height: 1;
+  line-height: 1.18;
   display: inline-block;
 }
 

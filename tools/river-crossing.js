@@ -462,26 +462,35 @@ function RiverCrossingVisualizer() {
       h(
         "div",
         { className: "controls" },
-        h("button", { className: "ctrl-btn primary", type: "button", onClick: reset }, "Reset"),
-        h("button", { className: "ctrl-btn", type: "button", onClick: startAutoSolve, disabled: autoSolving || controlsBusy }, "Auto-solve"),
         h(
-          "label",
-          { className: "speed-control" },
-          h("span", null, "Speed"),
+          "div",
+          { className: "control-pair" },
+          h("button", { className: "ctrl-btn primary", type: "button", onClick: reset }, "Reset"),
+          h("button", { className: "ctrl-btn", type: "button", onClick: stepSolution, disabled: !canStep }, "Step"),
+        ),
+        h(
+          "div",
+          { className: "control-pair" },
+          h("button", { className: "ctrl-btn", type: "button", onClick: startAutoSolve, disabled: autoSolving || controlsBusy }, "Auto-solve"),
           h(
-            "select",
-            {
-              value: autoSpeed,
-              onChange: (event) => setAutoSpeed(Number(event.target.value)),
-              disabled: autoSolving || controlsBusy,
-              "aria-label": "Auto-solve speed",
-            },
-            SPEED_OPTIONS.map((option) =>
-              h("option", { key: option.value, value: option.value }, option.label),
+            "div",
+            { className: "speed-select-wrap" },
+            h("span", { className: "speed-label" }, "Speed"),
+            h(
+              "select",
+              {
+                className: "speed-select",
+                value: autoSpeed,
+                onChange: (event) => setAutoSpeed(Number(event.target.value)),
+                disabled: autoSolving || controlsBusy,
+                "aria-label": "Auto-solve speed",
+              },
+              SPEED_OPTIONS.map((option) =>
+                h("option", { key: option.value, value: option.value }, option.label),
+              ),
             ),
           ),
         ),
-        h("button", { className: "ctrl-btn", type: "button", onClick: stepSolution, disabled: !canStep }, "Step"),
       ),
     ),
   );

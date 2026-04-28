@@ -446,39 +446,48 @@ function MontyHallVisualizer() {
         { className: "controls" },
         h("button", { className: "ctrl-btn primary", type: "button", onClick: resetRound }, "Reset"),
         h(
-          "label",
-          { className: "sim-field" },
-          h("span", null, "Games"),
-          h("input", {
-            type: "number",
-            min: "1",
-            max: "10000",
-            value: simulation.targetGames,
-            onChange: updateSimulationTarget,
-            disabled: simulation.running,
-            "aria-label": "Number of simulation games",
-          }),
-        ),
-        simulation.running
-          ? h("button", { className: "ctrl-btn", type: "button", onClick: pauseSimulation }, "Pause")
-          : h("button", { className: "ctrl-btn", type: "button", onClick: startSimulation }, "Auto-simulate"),
-        h(
-          "label",
-          { className: "sim-field" },
-          h("span", null, "Speed"),
+          "div",
+          { className: "control-pair" },
           h(
-            "select",
-            {
-              value: simulation.speedMs,
-              onChange: updateSimulationSpeed,
-              "aria-label": "Simulation speed",
-            },
-            SPEED_OPTIONS.map((option) =>
-              h("option", { key: option.value, value: option.value }, option.label),
+            "label",
+            { className: "sim-field" },
+            h("span", null, "Games"),
+            h("input", {
+              type: "number",
+              min: "1",
+              max: "10000",
+              value: simulation.targetGames,
+              onChange: updateSimulationTarget,
+              disabled: simulation.running,
+              "aria-label": "Number of simulation games",
+            }),
+          ),
+          simulation.running
+            ? h("button", { className: "ctrl-btn", type: "button", onClick: pauseSimulation }, h("span", { className: "btn-icon", "aria-hidden": "true" }, "⏸"), "Pause")
+            : h("button", { className: "ctrl-btn", type: "button", onClick: startSimulation }, "Auto-simulate"),
+        ),
+        h(
+          "div",
+          { className: "control-pair" },
+          h(
+            "div",
+            { className: "speed-select-wrap" },
+            h("span", { className: "speed-label" }, "Speed"),
+            h(
+              "select",
+              {
+                className: "speed-select",
+                value: simulation.speedMs,
+                onChange: updateSimulationSpeed,
+                "aria-label": "Simulation speed",
+              },
+              SPEED_OPTIONS.map((option) =>
+                h("option", { key: option.value, value: option.value }, option.label),
+              ),
             ),
           ),
+          h("button", { className: "ctrl-btn", type: "button", onClick: stepSimulation, disabled: simulation.running }, "Step"),
         ),
-        h("button", { className: "ctrl-btn", type: "button", onClick: stepSimulation, disabled: simulation.running }, "Step"),
       ),
       h(
         "aside",

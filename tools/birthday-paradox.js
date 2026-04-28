@@ -85,7 +85,7 @@ function ProbabilityChart({ n, curve }) {
   const height = 280;
   const padL = 48;
   const padR = 16;
-  const padT = 20;
+  const padT = 30;
   const padB = 36;
   const plotW = width - padL - padR;
   const plotH = height - padT - padB;
@@ -154,7 +154,7 @@ function ProbabilityChart({ n, curve }) {
       "text",
       {
         x: cx,
-        y: cy - 12,
+        y: Math.max(14, cy - 12),
         className: "chart-dot-label",
         textAnchor: "middle",
       },
@@ -330,12 +330,6 @@ function BirthdayParadoxVisualizer() {
         h(
           "div",
           { className: "info-chip" },
-          h("span", { className: "info-chip-label" }, "People"),
-          h("span", { className: "info-chip-value" }, n),
-        ),
-        h(
-          "div",
-          { className: "info-chip" },
           h("span", { className: "info-chip-label" }, "Unique pairs"),
           h("span", { className: "info-chip-value" }, pairs),
         ),
@@ -404,30 +398,33 @@ function BirthdayParadoxVisualizer() {
         h(
           "div",
           { className: "sim-controls" },
-          h("button", {
-            className: `ctrl-btn${simRunning ? " active" : ""}`,
-            type: "button",
-            onClick: () => {
-              if (simRunning) {
-                setSimRunning(false);
-              } else {
-                if (simCount > 0) resetSim();
-                setTimeout(() => setSimRunning(true), 0);
-              }
-            },
-          }, simRunning ? h(React.Fragment, null, h("span", { className: "btn-icon" }, "⏹"), "Stop") : h(React.Fragment, null, h("span", { className: "btn-icon" }, "▶"), "Play")),
-          h("button", { className: "ctrl-btn secondary", type: "button", onClick: resetSim, disabled: simRunning }, "Reset"),
+          h("button", { className: "ctrl-btn primary sim-reset-btn", type: "button", onClick: resetSim }, "Reset"),
           h(
             "div",
-            { className: "speed-select-wrap" },
-            h("span", { className: "speed-label" }, "Speed"),
-            h("select", {
-              className: "speed-select",
-              value: simSpeed,
-              onChange: (e) => setSimSpeed(Number(e.target.value)),
-            }, SPEED_OPTIONS.map((opt, i) =>
-              h("option", { key: i, value: i }, opt.label)
-            )),
+            { className: "sim-control-pair" },
+            h("button", {
+              className: `ctrl-btn${simRunning ? " active" : ""}`,
+              type: "button",
+              onClick: () => {
+                if (simRunning) {
+                  setSimRunning(false);
+                } else {
+                  setTimeout(() => setSimRunning(true), 0);
+                }
+              },
+            }, simRunning ? h(React.Fragment, null, h("span", { className: "btn-icon", "aria-hidden": "true" }, "⏸"), "Pause") : h(React.Fragment, null, h("span", { className: "btn-icon", "aria-hidden": "true" }, "▶"), "Play")),
+            h(
+              "div",
+              { className: "speed-select-wrap" },
+              h("span", { className: "speed-label" }, "Speed"),
+              h("select", {
+                className: "speed-select",
+                value: simSpeed,
+                onChange: (e) => setSimSpeed(Number(e.target.value)),
+              }, SPEED_OPTIONS.map((opt, i) =>
+                h("option", { key: i, value: i }, opt.label)
+              )),
+            ),
           ),
         ),
       ),

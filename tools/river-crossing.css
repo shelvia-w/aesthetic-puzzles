@@ -431,6 +431,7 @@ button {
   font-weight: 700;
   padding: 0 1.35rem;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
   cursor: pointer;
   transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
 }
@@ -501,43 +502,54 @@ button {
   justify-content: center;
 }
 
-.speed-control {
-  display: inline-flex;
+.control-pair {
+  display: contents;
+}
+
+.speed-select-wrap {
+  display: flex;
   min-height: 2.75rem;
-  min-width: 11.8rem;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  justify-content: center;
+  gap: 0.6rem;
   border: 1px solid rgba(199, 184, 255, 0.4);
   border-radius: 999px;
+  padding: 0 1.15rem;
   background:
     linear-gradient(135deg, rgba(199, 184, 255, 0.13), rgba(245, 163, 207, 0.08)),
     rgba(12, 11, 32, 0.78);
-  color: #fff;
-  font-size: 0.82rem;
-  font-weight: 800;
-  padding: 0 0.65rem 0 1rem;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
 }
 
-.speed-control select {
-  min-width: 5.7rem;
-  height: 2rem;
-  border: 0;
-  background: transparent;
+.speed-label {
   color: #fff;
-  cursor: pointer;
-  font: inherit;
-  padding: 0 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
-.speed-control select:disabled {
+.speed-select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23fff'/%3E%3C/svg%3E") no-repeat right center;
+  padding: 0.15rem 1.1rem 0.15rem 0.2rem;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+}
+
+.speed-select:disabled {
   cursor: default;
 }
 
-.speed-control select option {
-  background: #f8f4ff;
-  color: #1b1530;
+.speed-select option {
+  background: rgba(12, 11, 32, 0.78);
+  color: #fff;
 }
 
 .stats-panel {
@@ -589,6 +601,7 @@ button {
     background: transparent;
     box-shadow: none;
     backdrop-filter: none;
+    gap: 0.45rem;
   }
 
   .scene {
@@ -670,7 +683,8 @@ button {
   }
 
   .interaction-zone {
-    min-height: 7.2rem;
+    min-height: 3.8rem;
+    gap: 0.45rem;
   }
 
   .action-row,
@@ -679,24 +693,30 @@ button {
     width: 100%;
   }
 
+  .control-pair {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  .action-row {
+    align-items: center;
+  }
+
+  .action-row .choice-btn {
+    width: min(100%, 7.5rem);
+    min-height: 2.35rem;
+    padding: 0 0.9rem;
+    font-size: 0.84rem;
+  }
+
   .choice-btn,
   .ctrl-btn {
     width: 100%;
   }
 
-  .speed-control {
+  .speed-select-wrap {
     width: 100%;
-    min-height: 2.75rem;
-    justify-content: center;
-    gap: 0.75rem;
-    color: #fff;
-    padding: 0 1.5rem;
-  }
-
-  .speed-control select {
-    flex: 0 0 7.2rem;
-    min-width: 7.2rem;
-    border-radius: 999px;
-    text-align-last: center;
   }
 }

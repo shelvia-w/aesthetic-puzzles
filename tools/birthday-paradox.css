@@ -256,14 +256,17 @@ button {
 .info-row {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.6rem;
 }
 
 .info-chip {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.45rem;
   min-height: 2rem;
+  width: min(100%, 8.8rem);
   border: 1px solid rgba(199, 184, 255, 0.18);
   border-radius: 999px;
   background: rgba(12, 11, 32, 0.6);
@@ -455,7 +458,7 @@ button {
 }
 
 .room-result {
-  margin: 0;
+  margin: 0.45rem 0 0;
   color: var(--muted);
   font-family: "Cormorant Garamond", Georgia, serif;
   font-size: 1.1rem;
@@ -505,6 +508,10 @@ button {
   gap: 0.6rem;
 }
 
+.sim-control-pair {
+  display: contents;
+}
+
 /* ── Shared buttons ── */
 
 .ctrl-btn {
@@ -519,6 +526,7 @@ button {
   font-weight: 700;
   padding: 0 1.15rem;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
   transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
 }
 
@@ -531,14 +539,8 @@ button {
   transform: translateY(-2px);
 }
 
-.ctrl-btn.secondary {
-  border-color: rgba(255, 255, 255, 0.15);
-  background: rgba(12, 11, 32, 0.5);
-}
-
-.ctrl-btn.secondary:hover {
-  border-color: rgba(255, 255, 255, 0.35);
-  background: rgba(23, 16, 50, 0.7);
+.ctrl-btn.primary {
+  border-color: rgba(245, 163, 207, 0.58);
 }
 
 /* ── Speed select ── */
@@ -556,10 +558,11 @@ button {
     linear-gradient(135deg, rgba(199, 184, 255, 0.13), rgba(245, 163, 207, 0.08)),
     rgba(12, 11, 32, 0.78);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
 }
 
 .speed-label {
-  color: rgba(255, 255, 255, 0.55);
+  color: #fff;
   font-size: 0.82rem;
   font-weight: 600;
   white-space: nowrap;
@@ -580,12 +583,16 @@ button {
 }
 
 .speed-select option {
-  background: #0c0b20;
+  background: rgba(12, 11, 32, 0.78);
   color: #fff;
 }
 
 .btn-icon {
-  margin-right: 0.75em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  margin-right: 0.6em;
 }
 
 /* ── Stats panel ── */
@@ -681,6 +688,17 @@ button {
 
   .sim-controls {
     flex-direction: column;
+  }
+
+  .sim-reset-btn {
+    width: 100%;
+  }
+
+  .sim-control-pair {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.75rem;
+    width: 100%;
   }
 
   .ctrl-btn {

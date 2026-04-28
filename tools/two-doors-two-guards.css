@@ -919,7 +919,12 @@ button {
 
 @media (max-width: 480px) {
   .scene {
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 4 / 4.45;
+  }
+
+  .door-group,
+  .guard {
+    bottom: 14%;
   }
 
   .door-left {
