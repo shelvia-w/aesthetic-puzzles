@@ -330,7 +330,7 @@ function RiverCrossingVisualizer() {
     return h(
       "div",
       { className: `bank bank-${side}` },
-      h("div", { className: "bank-label" }, side === "left" ? "Origin" : "Destination"),
+      h("div", { className: "bank-label" }, side === "left" ? "Origin" : "Goal"),
       h(
         "div",
         { className: "bank-items" },
