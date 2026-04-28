@@ -108,7 +108,8 @@ h1 {
   font-family: "Playfair Display", Georgia, serif;
   font-size: clamp(2.05rem, 7vw, 3rem);
   font-weight: 800;
-  line-height: 0.95;
+  line-height: 1.2;
+  padding-bottom: 0.1em;
   letter-spacing: 0;
   text-shadow: none;
 }
@@ -474,6 +475,13 @@ h2 {
   line-height: 1;
 }
 
+.top-nav-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 /* ── Puzzle detail page: top image / bottom description ── */
 
 .puzzle-page-card {
@@ -634,7 +642,7 @@ h2 {
   max-width: 34rem;
   color: rgba(235, 229, 243, 0.8);
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 400;
   line-height: 1.5;
 }
 
@@ -812,6 +820,26 @@ h2 {
   background: rgba(255, 255, 255, 0.06);
   color: #f8eef5;
   font-size: 1.25rem;
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 1.35rem;
+  }
+
+  .solution-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .solution-page-card {
+    gap: 1.5rem;
+    min-height: auto;
+  }
+
+  .solution-media {
+    min-height: auto;
+  }
 }
 
 @media (min-width: 640px) {

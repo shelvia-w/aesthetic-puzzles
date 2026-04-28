@@ -1,4 +1,4 @@
-const { useCallback, useEffect, useMemo, useState } = React;
+const { useEffect, useMemo, useState } = React;
 const h = React.createElement;
 
 const ITEMS = {
@@ -16,11 +16,13 @@ const LABELS = {
   farmer: "Farmer",
 };
 
-const EMOJI = {
-  wolf: "🐺",
-  goat: "🐐",
-  cabbage: "🥦",
-  farmer: "🧑‍🌾",
+const IMAGES = {
+  wolf: "../public/images/river-crossing/wolf.png",
+  goat: "../public/images/river-crossing/goat.png",
+  cabbage: "../public/images/river-crossing/cabbage.png",
+  farmer: "../public/images/river-crossing/farmer.png",
+  boat: "../public/images/river-crossing/boat.png",
+  river: "../public/images/river-crossing/river.png",
 };
 
 const CONFLICTS = [
@@ -36,6 +38,16 @@ const SOLUTION_STEPS = [
   { carry: ITEMS.CABBAGE, direction: "cross" },
   { carry: null, direction: "cross" },
   { carry: ITEMS.GOAT, direction: "cross" },
+];
+
+const BASE_BOAT_ANIMATION_MS = 1000;
+const BASE_AUTO_SOLVE_STEP_DELAY_MS = 150;
+const BASE_AUTO_SOLVE_SELECT_MS = 450;
+const SPEED_OPTIONS = [
+  { value: 0.25, label: "Slow" },
+  { value: 0.5, label: "Normal" },
+  { value: 1, label: "Fast" },
+  { value: 1.5, label: "Very fast" },
 ];
 
 function createInitialState() {
@@ -69,18 +81,26 @@ function RiverCrossingVisualizer() {
   const [animating, setAnimating] = useState(false);
   const [autoSolving, setAutoSolving] = useState(false);
   const [solveStep, setSolveStep] = useState(0);
+  const [boatSide, setBoatSide] = useState("left");
+  const [autoSelectedItem, setAutoSelectedItem] = useState(null);
+  const [autoSpeed, setAutoSpeed] = useState(1);
 
   const farmerSide = state.farmerSide;
   const otherSide = farmerSide === "left" ? "right" : "left";
 
   const instruction = useMemo(() => {
-    if (state.status === "won") return "All safely across! Well done.";
-    if (state.status === "lost") return state.eatenMessage;
+    if (state.status === "won") return null;
+    if (state.status === "lost") return null;
     if (state.boat !== null) return `${LABELS[state.boat]} is in the boat. Cross the river or unload.`;
     return "Click an item on your side to load it, or cross empty.";
   }, [state.status, state.boat, state.eatenMessage]);
 
   const moveCount = state.history.length;
+  const boatAnimationMs = BASE_BOAT_ANIMATION_MS / autoSpeed;
+  const autoSolveStepDelayMs = BASE_AUTO_SOLVE_STEP_DELAY_MS / autoSpeed;
+  const autoSolveSelectMs = BASE_AUTO_SOLVE_SELECT_MS / autoSpeed;
+  const canStep = state.status === "playing" && !animating && !autoSolving && autoSelectedItem === null && solveStep < SOLUTION_STEPS.length;
+  const controlsBusy = animating || autoSelectedItem !== null;
 
   useEffect(() => {
     if (!autoSolving) return;
@@ -89,38 +109,79 @@ function RiverCrossingVisualizer() {
       return;
     }
 
+    let loadTimer = null;
+    let finishTimer = null;
+
+    function moveBoat(step, destination) {
+      setAnimating(true);
+      setBoatSide(destination);
+
+      finishTimer = window.setTimeout(() => {
+        setState((prev) => {
+          const next = {
+            ...prev,
+            left: new Set(prev.left),
+            right: new Set(prev.right),
+            farmerSide: destination,
+            history: [...prev.history, { carry: step.carry, to: destination }],
+          };
+
+          if (next.boat !== null) {
+            next[destination].add(next.boat);
+            next.boat = null;
+          }
+
+          if (checkWin(next)) {
+            next.status = "won";
+          }
+
+          return next;
+        });
+
+        setAnimating(false);
+        setSolveStep((s) => s + 1);
+      }, boatAnimationMs);
+    }
+
     const timer = window.setTimeout(() => {
+      if (state.status !== "playing") {
+        setAutoSolving(false);
+        return;
+      }
+
       const step = SOLUTION_STEPS[solveStep];
+      const destination = state.farmerSide === "left" ? "right" : "left";
+
+      if (step.carry) {
+        setAutoSelectedItem(step.carry);
+        loadTimer = window.setTimeout(() => {
+          setAutoSelectedItem(null);
+          setState((prev) => {
+            if (prev.status !== "playing") return prev;
+            const next = { ...prev, left: new Set(prev.left), right: new Set(prev.right) };
+            next[next.farmerSide].delete(step.carry);
+            next.boat = step.carry;
+            return next;
+          });
+
+          moveBoat(step, destination);
+        }, autoSolveSelectMs);
+        return;
+      }
+
       setState((prev) => {
         if (prev.status !== "playing") return prev;
-        let next = { ...prev, left: new Set(prev.left), right: new Set(prev.right) };
-
-        if (step.carry) {
-          next[next.farmerSide].delete(step.carry);
-          next.boat = step.carry;
-        } else {
-          next.boat = null;
-        }
-
-        const destination = next.farmerSide === "left" ? "right" : "left";
-        if (next.boat !== null) {
-          next[destination].add(next.boat);
-        }
-        next.farmerSide = destination;
-        next.boat = null;
-        next.history = [...next.history, { carry: step.carry, to: destination }];
-
-        if (checkWin(next)) {
-          next.status = "won";
-        }
-
-        return next;
+        return { ...prev, boat: null };
       });
-      setSolveStep((s) => s + 1);
-    }, 900);
+      moveBoat(step, destination);
+    }, autoSolveStepDelayMs);
 
-    return () => clearTimeout(timer);
-  }, [autoSolving, solveStep]);
+    return () => {
+      clearTimeout(timer);
+      if (loadTimer !== null) clearTimeout(loadTimer);
+      if (finishTimer !== null) clearTimeout(finishTimer);
+    };
+  }, [autoSolving, solveStep, state.farmerSide, state.status]);
 
   function loadItem(item) {
     if (state.status !== "playing" || animating || autoSolving) return;
@@ -148,10 +209,14 @@ function RiverCrossingVisualizer() {
   function crossRiver() {
     if (state.status !== "playing" || animating || autoSolving) return;
 
+    const destination = farmerSide === "left" ? "right" : "left";
+
     setAnimating(true);
+    setBoatSide(destination);
+
     setTimeout(() => {
+      setBoatSide(destination);
       setState((prev) => {
-        const destination = prev.farmerSide === "left" ? "right" : "left";
         const next = {
           ...prev,
           left: new Set(prev.left),
@@ -167,28 +232,86 @@ function RiverCrossingVisualizer() {
 
         if (checkWin(next)) {
           next.status = "won";
-          return next;
-        }
-
-        const leftConflict = next.farmerSide === "right" ? checkConflict(next.left) : null;
-        const rightConflict = next.farmerSide === "left" ? checkConflict(next.right) : null;
-        const conflict = leftConflict || rightConflict;
-
-        if (conflict) {
-          next.status = "lost";
-          next.eatenMessage = conflict;
+        } else {
+          const leftConflict = next.farmerSide === "right" ? checkConflict(next.left) : null;
+          const rightConflict = next.farmerSide === "left" ? checkConflict(next.right) : null;
+          const conflict = leftConflict || rightConflict;
+          if (conflict) {
+            next.status = "lost";
+            next.eatenMessage = conflict;
+          }
         }
 
         return next;
       });
+
       setAnimating(false);
-    }, 500);
+    }, boatAnimationMs);
+  }
+
+  function stepSolution() {
+    if (!canStep) return;
+
+    const step = SOLUTION_STEPS[solveStep];
+    const destination = farmerSide === "left" ? "right" : "left";
+
+    function crossAndUnload() {
+      setAnimating(true);
+      setBoatSide(destination);
+
+      setTimeout(() => {
+        setState((prev) => {
+          const next = {
+            ...prev,
+            left: new Set(prev.left),
+            right: new Set(prev.right),
+            farmerSide: destination,
+            history: [...prev.history, { carry: step.carry, to: destination }],
+          };
+
+          if (next.boat !== null) {
+            next[destination].add(next.boat);
+            next.boat = null;
+          }
+
+          if (checkWin(next)) {
+            next.status = "won";
+          }
+
+          return next;
+        });
+
+        setAnimating(false);
+        setSolveStep((s) => s + 1);
+      }, boatAnimationMs);
+    }
+
+    if (step.carry) {
+      setAutoSelectedItem(step.carry);
+      setTimeout(() => {
+        setAutoSelectedItem(null);
+        setState((prev) => {
+          if (prev.status !== "playing") return prev;
+          const next = { ...prev, left: new Set(prev.left), right: new Set(prev.right) };
+          next[next.farmerSide].delete(step.carry);
+          next.boat = step.carry;
+          return next;
+        });
+        crossAndUnload();
+      }, autoSolveSelectMs);
+      return;
+    }
+
+    setState((prev) => (prev.status === "playing" ? { ...prev, boat: null } : prev));
+    crossAndUnload();
   }
 
   function reset() {
     setAutoSolving(false);
     setSolveStep(0);
     setAnimating(false);
+    setAutoSelectedItem(null);
+    setBoatSide("left");
     setState(createInitialState());
   }
 
@@ -207,33 +330,35 @@ function RiverCrossingVisualizer() {
     return h(
       "div",
       { className: `bank bank-${side}` },
-      h("div", { className: "bank-label" }, side === "left" ? "Start" : "Finish"),
+      h("div", { className: "bank-label" }, side === "left" ? "Origin" : "Destination"),
       h(
         "div",
         { className: "bank-items" },
-        isFarmerHere
-          ? h("div", { className: "entity farmer-entity" }, h("span", { className: "entity-emoji" }, EMOJI.farmer), h("span", { className: "entity-label" }, "Farmer"))
+        isFarmerHere && !animating
+          ? h("div", { className: "entity farmer-entity" }, h("img", { className: "entity-art", src: IMAGES.farmer, alt: "Farmer" }), h("span", { className: "entity-label" }, "Farmer"))
           : null,
-        items.map((item) =>
-          h(
+        items.map((item) => {
+          const selected = autoSelectedItem === item && isFarmerHere;
+          return h(
             "button",
             {
               key: item,
               type: "button",
-              className: `entity item-entity ${isFarmerHere && state.status === "playing" && state.boat === null ? "pickable" : ""}`,
+              className: `entity item-entity ${isFarmerHere && state.status === "playing" && state.boat === null ? "pickable" : ""} ${selected ? "selected" : ""}`,
               onClick: () => loadItem(item),
               disabled: !isFarmerHere || state.status !== "playing" || state.boat !== null || autoSolving,
             },
-            h("span", { className: "entity-emoji" }, EMOJI[item]),
+            h("img", { className: "entity-art", src: IMAGES[item], alt: LABELS[item] }),
             h("span", { className: "entity-label" }, LABELS[item]),
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
 
   function renderBoat() {
-    const boatClass = `boat ${state.farmerSide === "right" ? "boat-right" : "boat-left"} ${animating ? "boat-moving" : ""}`;
+    const boatClass = `boat ${boatSide === "right" ? "boat-right" : "boat-left"}`;
+    const boatStyle = { transitionDuration: `${boatAnimationMs}ms` };
 
     return h(
       "div",
@@ -241,28 +366,33 @@ function RiverCrossingVisualizer() {
       h(
         "div",
         { className: "river" },
+        h("img", { className: "river-art", src: IMAGES.river, alt: "" }),
         h("div", { className: "wave wave-1" }),
         h("div", { className: "wave wave-2" }),
         h("div", { className: "wave wave-3" }),
       ),
       h(
         "div",
-        { className: boatClass },
-        h("div", { className: "boat-icon" }, "⛵"),
-        h("div", { className: "boat-emoji" }, EMOJI.farmer),
-        state.boat !== null
-          ? h(
-              "button",
-              {
-                type: "button",
-                className: "boat-passenger",
-                onClick: unloadItem,
-                disabled: state.status !== "playing" || autoSolving,
-                "aria-label": `Unload ${LABELS[state.boat]}`,
-              },
-              h("span", { className: "entity-emoji" }, EMOJI[state.boat]),
-            )
-          : h("div", { className: "boat-empty" }, "Empty"),
+        { className: boatClass, style: boatStyle },
+        h("img", { className: "boat-art", src: IMAGES.boat, alt: "Boat" }),
+        h(
+          "div",
+          { className: "boat-occupants" },
+          h("img", { className: "boat-farmer-art", src: IMAGES.farmer, alt: "Farmer" }),
+          state.boat !== null
+            ? h(
+                "button",
+                {
+                  type: "button",
+                  className: "boat-passenger",
+                  onClick: unloadItem,
+                  disabled: state.status !== "playing" || autoSolving,
+                  "aria-label": `Unload ${LABELS[state.boat]}`,
+                },
+                h("img", { className: "entity-art", src: IMAGES[state.boat], alt: LABELS[state.boat] }),
+              )
+            : null,
+        ),
       ),
     );
   }
@@ -313,7 +443,7 @@ function RiverCrossingVisualizer() {
                   onClick: crossRiver,
                   disabled: animating || autoSolving,
                 },
-                state.farmerSide === "left" ? "Cross →" : "← Cross",
+                boatSide === "left" ? "Cross →" : "← Cross",
               ),
             )
           : null,
@@ -328,20 +458,30 @@ function RiverCrossingVisualizer() {
     ),
     h(
       "section",
-      { className: "lower-row", "aria-label": "Controls and statistics" },
+      { className: "lower-row", "aria-label": "Controls" },
       h(
         "div",
         { className: "controls" },
         h("button", { className: "ctrl-btn primary", type: "button", onClick: reset }, "Reset"),
-        h("button", { className: "ctrl-btn", type: "button", onClick: startAutoSolve, disabled: autoSolving }, "Auto-solve"),
-      ),
-      h(
-        "aside",
-        { className: "stats-panel", "aria-label": "Game statistics" },
-        h("div", null, h("span", null, "Moves"), h("strong", null, moveCount)),
-        h("div", null, h("span", null, "Farmer"), h("strong", null, state.farmerSide === "left" ? "Start side" : "Finish side")),
-        h("div", null, h("span", null, "Boat"), h("strong", null, state.boat ? LABELS[state.boat] : "Empty")),
-        h("div", null, h("span", null, "Status"), h("strong", null, state.status === "playing" ? "In progress" : state.status === "won" ? "Solved" : "Failed")),
+        h("button", { className: "ctrl-btn", type: "button", onClick: startAutoSolve, disabled: autoSolving || controlsBusy }, "Auto-solve"),
+        h(
+          "label",
+          { className: "speed-control" },
+          h("span", null, "Speed"),
+          h(
+            "select",
+            {
+              value: autoSpeed,
+              onChange: (event) => setAutoSpeed(Number(event.target.value)),
+              disabled: autoSolving || controlsBusy,
+              "aria-label": "Auto-solve speed",
+            },
+            SPEED_OPTIONS.map((option) =>
+              h("option", { key: option.value, value: option.value }, option.label),
+            ),
+          ),
+        ),
+        h("button", { className: "ctrl-btn", type: "button", onClick: stepSolution, disabled: !canStep }, "Step"),
       ),
     ),
   );

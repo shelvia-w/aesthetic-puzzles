@@ -126,7 +126,8 @@ button {
   font-family: "Playfair Display", Georgia, serif;
   font-size: clamp(1.6rem, 5vw, 2.4rem);
   font-weight: 800;
-  line-height: 1.1;
+  line-height: 1.3;
+  padding-bottom: 0.1em;
 }
 
 .viz-subtitle {
@@ -922,24 +923,40 @@ button {
 
   .door-left {
     left: 50%;
+    --door-scale: 0.85;
+    transform: translateX(calc(-100% - -0.3rem));
   }
 
   .door-right {
     left: 50%;
     right: auto;
+    --door-scale: 0.88;
+    transform: translateX(0.2rem);
   }
 
   .guard-left {
-    left: 4%;
+    left: 2%;
+    --guard-scale: 1;
   }
 
   .guard-right {
-    right: 4%;
+    right: 2%;
+    --guard-scale: 0.78;
+  }
+
+  .door-label,
+  .guard-label {
+    font-size: 0.62rem;
+    min-height: 1.4rem;
+    padding: 0 0.6rem;
   }
 
   .speech-bubble {
-    max-width: 88%;
-    top: 2%;
+    max-width: calc(100% - 1rem);
+    width: max-content;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 8%;
   }
 
   .controls {
@@ -957,8 +974,21 @@ button {
   }
 
   .thought-bubble {
-    top: -4.5rem;
-    padding: 0.35rem 0.55rem;
+    width: clamp(3.4rem, 10vw, 4.5rem);
+    padding: 0.5rem 0.45rem 0.55rem;
   }
 
+  .thought-content {
+    font-size: 0.58rem;
+  }
+
+  .guard-left .thought-bubble {
+    top: -18%;
+    left: 30%;
+  }
+
+  .guard-right .thought-bubble {
+    top: -1%;
+    left: 70%;
+  }
 }

@@ -459,6 +459,9 @@ function MontyHallVisualizer() {
             "aria-label": "Number of simulation games",
           }),
         ),
+        simulation.running
+          ? h("button", { className: "ctrl-btn", type: "button", onClick: pauseSimulation }, "Pause")
+          : h("button", { className: "ctrl-btn", type: "button", onClick: startSimulation }, "Auto-simulate"),
         h(
           "label",
           { className: "sim-field" },
@@ -475,9 +478,6 @@ function MontyHallVisualizer() {
             ),
           ),
         ),
-        simulation.running
-          ? h("button", { className: "ctrl-btn", type: "button", onClick: pauseSimulation }, "Pause")
-          : h("button", { className: "ctrl-btn", type: "button", onClick: startSimulation }, "Auto-simulate"),
         h("button", { className: "ctrl-btn", type: "button", onClick: stepSimulation, disabled: simulation.running }, "Step"),
       ),
       h(

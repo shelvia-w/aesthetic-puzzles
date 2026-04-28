@@ -69,7 +69,10 @@ if (problem && detailPage) {
     .join("");
 
   detailPage.innerHTML = `
-    <a class="back-link" href="../problems/${problem.slug}.html"><span aria-hidden="true">&larr;</span> Back to Problem</a>
+    <nav class="top-nav-row">
+      <a class="back-link" href="../problems/${problem.slug}.html"><span aria-hidden="true">&larr;</span> Back to Problem</a>
+      <a class="back-link" href="../tools/${problem.slug}.html"><span aria-hidden="true">&#9654;</span> Open Interactive Visualizer</a>
+    </nav>
     <section class="solution-page-card">
       <figure class="solution-media ${problem.accent}" aria-label="${problem.title} solution illustration">
         <img src="../${problem.solutionImagePath}" alt="${problem.title} solution illustration" />
@@ -82,9 +85,6 @@ if (problem && detailPage) {
           ${steps}
         </div>
         <div class="solution-actions">
-          <a class="tool-cta" href="../tools/${problem.slug}.html">
-            <span class="tool-cta-icon" aria-hidden="true">&#9654;</span> Interactive Tool
-          </a>
           <button class="tool-cta mistake-cta" id="mistakeBtn" type="button">
             <span class="tool-cta-icon" aria-hidden="true">?</span> Common Mistakes
           </button>

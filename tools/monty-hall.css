@@ -115,7 +115,8 @@ button {
   font-family: "Playfair Display", Georgia, serif;
   font-size: clamp(1.6rem, 5vw, 2.4rem);
   font-weight: 800;
-  line-height: 1.1;
+  line-height: 1.3;
+  padding-bottom: 0.1em;
 }
 
 .monty-subtitle {
@@ -601,12 +602,13 @@ button {
   }
 
   .stage {
-    grid-template-columns: minmax(3.8rem, 0.7fr) minmax(10rem, 2.5fr) minmax(3.8rem, 0.7fr);
-    padding: 0.8rem;
+    grid-template-columns: minmax(2.8rem, 0.6fr) minmax(10rem, 2.8fr) minmax(2.8rem, 0.6fr);
+    padding: 0.5rem;
+    gap: 0.25rem;
   }
 
   .doors {
-    gap: 0.35rem;
+    gap: 0.2rem;
   }
 
   .door-label {
@@ -642,7 +644,8 @@ button {
   }
 
   .sim-field {
-    justify-content: space-between;
+    justify-content: center;
+    gap: 0.75rem;
   }
 }
 
@@ -781,4 +784,43 @@ button {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.055),
     0 0 16px rgba(240, 90, 168, 0.24) !important;
+}
+
+/* ── Mobile scale overrides (must come after !important blocks) ── */
+
+@media (max-width: 480px) {
+  .character,
+  .door-button {
+    height: clamp(9.5rem, 24vw, 13rem) !important;
+  }
+
+  .character-art {
+    width: clamp(3rem, 15vw, 4rem) !important;
+  }
+
+  .character-art,
+  .door-plate {
+    bottom: 2.4rem !important;
+  }
+
+  .character span,
+  .door-label {
+    bottom: 0.8rem !important;
+  }
+
+  .door-plate {
+    width: min(100%, clamp(4rem, 20vw, 5.2rem)) !important;
+  }
+
+  .stage-pill {
+    font-size: 0.56rem !important;
+    min-width: 0 !important;
+    min-height: 1.25rem !important;
+    padding: 0 0.35rem !important;
+  }
+
+  .door-mark {
+    font-size: 0.5rem !important;
+    letter-spacing: 0.04em !important;
+  }
 }
