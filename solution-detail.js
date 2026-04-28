@@ -40,6 +40,18 @@ if (problem && detailPage) {
           "After delivering the wolf, you can't just leave it with the goat and go back for the cabbage. You must bring the goat back to the starting side to prevent it from being eaten, then take the cabbage over.",
       },
     ],
+    "birthday-paradox": [
+      {
+        title: "Compare each person to one specific date",
+        body:
+          "The question is not \"does someone share MY birthday?\" but \"do ANY two people share A birthday?\" Every pair of people is a potential match, which is why the threshold is so much lower than most people guess.",
+      },
+      {
+        title: "Think you need 183 people for 50%",
+        body:
+          "Halving 365 feels right, but that logic only applies if you're matching against one fixed date. With n people there are n × (n − 1) / 2 pairs, and 23 people already give you 253 pairs, more than enough to cross 50%.",
+      },
+    ],
   };
 
   const steps = problem.solution.steps
@@ -71,7 +83,7 @@ if (problem && detailPage) {
   detailPage.innerHTML = `
     <nav class="top-nav-row">
       <a class="back-link" href="../problems/${problem.slug}.html"><span aria-hidden="true">&larr;</span> Back to Problem</a>
-      <a class="back-link" href="../tools/${problem.slug}.html"><span aria-hidden="true">&#9654;</span> Open Interactive Visualizer</a>
+      <a class="back-link" href="../tools/${problem.slug}.html"><span aria-hidden="true">&#9654;</span> <span><span class="hide-mobile">Open Interactive</span> Visualizer</span></a>
     </nav>
     <section class="solution-page-card">
       <figure class="solution-media ${problem.accent}" aria-label="${problem.title} solution illustration">
