@@ -1,7 +1,7 @@
 # Aesthetic Puzzles
 
-Aesthetic LeetCode turns algorithm practice into a visual, interactive, and beginner-friendly learning experience.
-https://shelvia-w.github.io/aesthetic-leetcode/
+Aesthetic Puzzles turns classic puzzles and brain teasers into visual, interactive, and beginner-friendly learning experiences.
+https://shelvia-w.github.io/aesthetic-puzzles/
 
 ![Alt](https://repobeats.axiom.co/api/embed/251e45a8a486428ba01a1cd6d949675b1a2b59e3.svg "Repobeats analytics image")
 
