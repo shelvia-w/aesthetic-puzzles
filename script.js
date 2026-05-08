@@ -5,10 +5,18 @@ const state = {
 
 const grid = document.querySelector("#problemGrid");
 const filtersNode = document.querySelector("#filters");
+const filterToggle = document.querySelector("#filterToggle");
+const filterToggleLabel = document.querySelector("#filterToggleLabel");
 const searchInput = document.querySelector("#searchInput");
 const emptyState = document.querySelector("#emptyState");
+const aboutTrigger = document.querySelector("#aboutTrigger");
+const aboutDrawer = document.querySelector("#aboutDrawer");
+const aboutBackdrop = document.querySelector("#aboutBackdrop");
+const aboutClose = document.querySelector("#aboutClose");
+let aboutBackdropTimer;
 
 function renderFilters() {
+  filterToggleLabel.textContent = state.activeFilter;
   filtersNode.innerHTML = filters
     .map(
       (filter) => `
@@ -18,6 +26,11 @@ function renderFilters() {
       `,
     )
     .join("");
+}
+
+function setMobileFiltersOpen(isOpen) {
+  filterToggle.setAttribute("aria-expanded", String(isOpen));
+  filtersNode.classList.toggle("filters-open", isOpen);
 }
 
 function getVisibleProblems() {
@@ -70,13 +83,61 @@ filtersNode.addEventListener("click", (event) => {
   }
 
   state.activeFilter = button.dataset.filter;
+  setMobileFiltersOpen(false);
   renderFilters();
   renderProblems();
+});
+
+filterToggle.addEventListener("click", () => {
+  const isOpen = filterToggle.getAttribute("aria-expanded") === "true";
+  setMobileFiltersOpen(!isOpen);
 });
 
 searchInput.addEventListener("input", (event) => {
   state.query = event.target.value;
   renderProblems();
+});
+
+function setAboutDrawerOpen(isOpen) {
+  window.clearTimeout(aboutBackdropTimer);
+  aboutTrigger.setAttribute("aria-expanded", String(isOpen));
+  aboutDrawer.setAttribute("aria-hidden", String(!isOpen));
+  document.body.classList.toggle("drawer-open", isOpen);
+
+  if (isOpen) {
+    aboutBackdrop.hidden = false;
+    requestAnimationFrame(() => {
+      aboutBackdrop.classList.add("visible");
+      aboutDrawer.classList.add("visible");
+    });
+    aboutClose.focus();
+    return;
+  }
+
+  aboutBackdrop.classList.remove("visible");
+  aboutDrawer.classList.remove("visible");
+  aboutTrigger.focus();
+  aboutBackdropTimer = window.setTimeout(() => {
+    aboutBackdrop.hidden = true;
+  }, 180);
+}
+
+aboutTrigger.addEventListener("click", () => {
+  setAboutDrawerOpen(true);
+});
+
+aboutClose.addEventListener("click", () => {
+  setAboutDrawerOpen(false);
+});
+
+aboutBackdrop.addEventListener("click", () => {
+  setAboutDrawerOpen(false);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && aboutDrawer.classList.contains("visible")) {
+    setAboutDrawerOpen(false);
+  }
 });
 
 renderFilters();

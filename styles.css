@@ -32,6 +32,10 @@ body {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+body.drawer-open {
+  overflow: hidden;
+}
+
 body::before {
   position: fixed;
   inset: 0;
@@ -92,9 +96,35 @@ button {
 }
 
 .hero-actions {
-  display: grid;
+  display: flex;
   gap: 0.85rem;
-  align-items: start;
+  align-items: center;
+}
+
+.about-trigger {
+  display: inline-flex;
+  min-height: 2.65rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(216, 180, 254, 0.36);
+  border-radius: 999px;
+  background: rgba(2, 6, 23, 0.42);
+  color: #f8eef5;
+  padding: 0 1.05rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(18px);
+  transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.about-trigger:hover,
+.about-trigger:focus-visible {
+  border-color: rgba(240, 90, 168, 0.76);
+  background: rgba(30, 20, 58, 0.76);
+  box-shadow: 0 0 28px rgba(240, 90, 168, 0.22);
+  transform: translateY(-1px);
 }
 
 h1 {
@@ -191,6 +221,14 @@ h1 {
 
 .search-wrap input::placeholder {
   color: #94a3b8;
+}
+
+.filter-wrap {
+  position: relative;
+}
+
+.filter-toggle {
+  display: none;
 }
 
 .filters {
@@ -440,6 +478,164 @@ h2 {
   margin: 2rem 0;
   color: var(--muted);
   text-align: center;
+}
+
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: rgba(3, 7, 18, 0.54);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.drawer-backdrop.visible {
+  opacity: 1;
+}
+
+.about-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 31;
+  display: grid;
+  align-content: start;
+  gap: 1.75rem;
+  width: min(100%, 23rem);
+  height: 100vh;
+  overflow-y: auto;
+  background: #1d1432;
+  color: #f7f1f8;
+  padding: 0.8rem 1.35rem 2rem;
+  box-shadow: -28px 0 80px rgba(2, 6, 23, 0.42);
+  transform: translateX(100%);
+  transition: transform 220ms ease;
+}
+
+.about-drawer.visible {
+  transform: translateX(0);
+}
+
+.about-close {
+  position: absolute;
+  top: 0.35rem;
+  right: 1.45rem;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  padding: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.about-drawer h2 {
+  margin-top: 2rem;
+  width: fit-content;
+  max-width: 100%;
+  background: var(--title-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  padding-right: 2rem;
+  color: transparent;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(1.85rem, 8vw, 2rem);
+  font-weight: 800;
+  line-height: 1.12;
+}
+
+.about-intro {
+  margin: -1.45rem 0 0;
+  color: rgba(226, 218, 236, 0.74);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.about-section {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9rem;
+  border-radius: 0.45rem;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 1.15rem 1.1rem;
+}
+
+.about-icon {
+  width: 1.45rem;
+  height: 1.45rem;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.about-icon-pink {
+  color: #ff2e9f;
+}
+
+.about-icon-yellow {
+  color: #f8c400;
+}
+
+.about-section h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.about-section p {
+  margin: 0.45rem 0 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.about-section a {
+  color: #ff73bd;
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.linkedin-link {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  border-radius: 0.45rem;
+  background: rgba(113, 83, 168, 0.48);
+  color: #fff;
+  padding: 0.75rem 1rem;
+  font-size: 0.87rem;
+  font-weight: 800;
+  transition: background 160ms ease, transform 160ms ease;
+}
+
+.linkedin-link:hover,
+.linkedin-link:focus-visible {
+  background: rgba(125, 95, 184, 0.7);
+  transform: translateY(-1px);
+}
+
+.linkedin-link span {
+  font-size: 1.05rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.contact-icon-linkedin {
+  color: #00e5ff;
+}
+
+.contact-icon-github {
+  color: #f4f0ff;
+}
+
+.contact-icon-email {
+  color: #ffd166;
 }
 
 .detail-shell {
@@ -825,6 +1021,85 @@ h2 {
 @media (max-width: 480px) {
   .hide-mobile {
     display: none;
+  }
+
+  .hero-actions {
+    gap: 0.6rem;
+  }
+
+  .about-trigger {
+    padding: 0 0.85rem;
+  }
+
+  .filter-wrap {
+    width: 100%;
+    margin-top: -0.3rem;
+  }
+
+  .filter-toggle {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: 0.55rem;
+    border: 1px solid rgba(240, 90, 168, 0.82);
+    border-radius: 999px;
+    background: rgba(25, 12, 42, 0.72);
+    color: #fff;
+    padding: 0 1.1rem;
+    font-size: 0.88rem;
+    font-weight: 800;
+    box-shadow: 0 12px 34px rgba(3, 7, 18, 0.22);
+    backdrop-filter: blur(18px);
+  }
+
+  .filter-toggle strong {
+    color: rgba(255, 255, 255, 0.72);
+    font-weight: 800;
+  }
+
+  .filter-toggle-caret {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-top: 2px solid currentColor;
+    border-right: 2px solid currentColor;
+    transform: translateY(-0.12rem) rotate(135deg);
+    transition: transform 160ms ease;
+  }
+
+  .filter-toggle[aria-expanded="true"] .filter-toggle-caret {
+    transform: translateY(0.12rem) rotate(-45deg);
+  }
+
+  .filters {
+    display: none;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem 0.65rem;
+    width: 100%;
+    margin-top: 0.55rem;
+    overflow: visible;
+    border: 1px solid rgba(216, 180, 254, 0.18);
+    border-radius: 1.05rem;
+    background: rgba(12, 10, 31, 0.78);
+    padding: 0.8rem 0.75rem;
+    box-shadow:
+      0 18px 44px rgba(3, 7, 18, 0.34),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+  }
+
+  .filters.filters-open {
+    display: grid;
+  }
+
+  .filters .chip {
+    width: 100%;
+    min-height: 2.45rem;
+    justify-content: center;
+    padding: 0 0.8rem;
+    font-size: 0.82rem;
+    font-weight: 800;
   }
 
   h2 {

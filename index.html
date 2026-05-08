@@ -30,16 +30,73 @@
             <span class="sr-only">Search puzzles</span>
             <input id="searchInput" type="search" placeholder="Search puzzles..." autocomplete="off" />
           </label>
+          <button class="about-trigger" type="button" id="aboutTrigger" aria-controls="aboutDrawer" aria-expanded="false">
+            About
+          </button>
         </div>
       </header>
 
-      <nav class="filters" aria-label="Puzzle filters" id="filters"></nav>
+      <div class="filter-wrap">
+        <button class="filter-toggle" type="button" id="filterToggle" aria-controls="filters" aria-expanded="false">
+          <span>Filter</span>
+          <strong id="filterToggleLabel">All</strong>
+          <span class="filter-toggle-caret" aria-hidden="true"></span>
+        </button>
+        <nav class="filters" aria-label="Puzzle filters" id="filters"></nav>
+      </div>
 
       <section aria-label="Puzzle gallery">
         <div class="grid" id="problemGrid"></div>
         <p class="empty" id="emptyState" hidden>No puzzles match that search.</p>
       </section>
     </main>
+
+    <div class="drawer-backdrop" id="aboutBackdrop" hidden></div>
+    <aside class="about-drawer" id="aboutDrawer" aria-labelledby="aboutTitle" aria-hidden="true">
+      <button class="about-close" type="button" id="aboutClose" aria-label="Close about drawer">x</button>
+      <h2 id="aboutTitle">Hello There!</h2>
+      <p class="about-intro">Thanks for checking out my fun little project.</p>
+
+      <div class="about-section">
+        <svg class="about-icon about-icon-pink" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+          <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+          <path d="M15.8 9.2a2.5 2.5 0 0 0-3.5 0l-.3.4-.35-.3a2.42 2.42 0 1 0-3.2 3.6l3.6 3.5 3.6-3.5c1.2-1.2 1.1-2.7.2-3.7" />
+        </svg>
+        <div>
+          <h3>About Me</h3>
+          <p>
+            My name is Shelvia, a recent PhD grad in AI, focused on generalization and trustworthiness.
+            I love reading research papers and enjoy blending design with AI to explore creative ideas.
+          </p>
+        </div>
+      </div>
+
+      <div class="about-section">
+        <svg class="about-icon about-icon-yellow" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+          <path d="M16 8.2A2.22 2.22 0 0 0 13.8 6c-.8 0-1.4.3-1.8.9-.4-.6-1-.9-1.8-.9A2.22 2.22 0 0 0 8 8.2c0 .6.3 1.2.7 1.6A226.652 226.652 0 0 0 12 13a404 404 0 0 0 3.3-3.1 2.413 2.413 0 0 0 .7-1.7" />
+          <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" />
+        </svg>
+        <div>
+          <h3>About This Project</h3>
+          <p>
+            I have always loved puzzles and brain teasers since I was young. I used to write about them on <a href="https://medium.com/@shelvia1039">Medium</a>, but eventually took a break and never quite returned to it. Part of the reason was that I realized I am more of a visualizer than a writer.With the help of AI, it has become much easier to bring puzzle problems and solutions to life visually. My love for design and puzzles is what led me to create this website, with the hope that others will find it useful and enjoyable too :)
+          </p>
+        </div>
+      </div>
+
+      <a class="linkedin-link" href="https://www.linkedin.com/" target="_blank" rel="noreferrer">
+        <span class="contact-icon-linkedin" aria-hidden="true">in</span>
+        Let's connect on LinkedIn!
+      </a>
+      <a class="linkedin-link" href="https://github.com/shelvia-w" target="_blank" rel="noreferrer">
+        <span class="contact-icon-github" aria-hidden="true">gh</span>
+        View my GitHub
+      </a>
+      <a class="linkedin-link" href="mailto:shelvia1039@gmail.com">
+        <span class="contact-icon-email" aria-hidden="true">@</span>
+        Send me an email
+      </a>
+    </aside>
 
     <script src="data.js"></script>
     <script src="script.js"></script>
